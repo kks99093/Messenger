@@ -77,6 +77,31 @@
 		</dependency>
 		<!-- jsp 끝  -->
 		
+		<!-- json -->		
+		<dependency>
+		  <groupId>com.googlecode.json-simple</groupId>
+		  <artifactId>json-simple</artifactId>
+		  <version>1.1.1</version>
+		</dependency>
+		<!-- json 끝 -->
+		
+		<!-- Model Mapper Entity <-> Dto 전환 시켜주는 라이브러리 -->		
+		<dependency>
+		  <groupId>org.modelmapper</groupId>
+		  <artifactId>modelmapper</artifactId>
+		  <version>2.4.0</version>
+		</dependency>
+		<!-- Model Mapper 끝 -->
+		
+		<!-- 시큐리티 tag라이브러리 jsp에서 시큐리티 tag쓰기위한 라이브러리 -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		</dependency>
+		<!--  -->
+		
 	</dependencies>
 
 	<build>

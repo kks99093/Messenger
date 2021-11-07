@@ -76,7 +76,7 @@ public class UserService {
 	public int attendanceChk(Attendance attendance) {
 		Attendance attendanceDto = attendanceRepository.findByUserPkAndYearAndMonthAndDay(attendance.getUserPk(), attendance.getYear(), attendance.getMonth(), attendance.getDay());
 		if(attendanceDto == null) {
-			return 0; //출근X test
+			return 0; //출근X
 		}else if(attendanceDto.getState() == 1) {
 			return 1; //출근O
 		}else {

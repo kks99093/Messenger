@@ -1,5 +1,6 @@
 package com.my.messenger.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +23,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Bean
+	public ModelMapper modelMapper() { // Entity <--> DTO 변환해주는 라이브러리
+		return new ModelMapper();
+	}
+	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("user/**").authenticated() //"/user/**"로 들어오는 주소에는 인증이 필요함
+			.antMatchers("/user/**","/board/**").authenticated() //"/user/**"로 들어오는 주소에는 인증이 필요함
 			.antMatchers("manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')") // "/manager/**"로 들어오는 주소는 인증과 권한 필요
 			.anyRequest().permitAll() //위의 주소를 제외하고는 전부 허용
 			.and()

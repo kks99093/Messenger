@@ -11,10 +11,10 @@ import com.my.messenger.auth.PrincipalDetails;
 public class TestController {
 
 
-	
-	@GetMapping({"/temp"})
-	public String temp() {
-		return "/template/mainTemp";
+	@GetMapping({"/chat"})
+	public String chat() {
+
+		return "/board/chat";
 	}
 	
 }

@@ -7,6 +7,7 @@
 <head>
 <link rel="stylesheet" href="/css/mainTemp.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css"> 
+<script src="/js/jquery-3.4.1.min.js"></script>    
 <script src="/js/mainTemp.js"></script>
 <meta charset="UTF-8">
 <title>${title }</title>
@@ -27,67 +28,46 @@
 	          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
 	        </div>
 	        <div class="user-info">
-	          <span class="user-name">Jhon
-	            <strong>Smith</strong>
+	          <span class="user-name">
+	            <strong>이름넣을곳</strong>
 	          </span>
-	          <span class="user-role">Administrator</span>
-	          <span class="user-status">
-	            <i class="fa fa-circle"></i>
-	            <span>Online</span>
-	          </span>
+	          <span class="user-role">직책</span>
 	        </div>
 	      </div>
 	      <div class="sidebar-menu">
 	        <ul>
+	        	<li class="header-menu" style="cursor: pointer;" id="mainBtn">
+	            	<span>메인</span>
+	          	</li>
 	          <li class="header-menu">
-	            <span>General</span>
+	            <span>전체</span>
 	          </li>
 	          <li class="sidebar-dropdown">
 	            <a href="#">
 	              <i class="fa fa-tachometer-alt"></i>
-	              <span>Dashboard</span>
+	              <span>공지</span>
 	              <span class="badge badge-pill badge-warning">New</span>
 	            </a>
 	          </li>
-	          <li class="sidebar-dropdown">
-	            <a href="#">
-	              <i class="fa fa-shopping-cart"></i>
-	              <span>E-commerce</span>
-	              <span class="badge badge-pill badge-danger">3</span>
-	            </a>
-	          </li>
-	          <li class="sidebar-dropdown">
-	            <a href="#">
-	              <i class="far fa-gem"></i>
-	              <span>Components</span>
-	            </a>
-	          </li>
-	          <li class="sidebar-dropdown">
-	            <a href="#">
-	              <i class="fa fa-chart-line"></i>
-	              <span>Charts</span>
-	            </a>
-	          </li>
 	          <li class="header-menu">
-	            <span>Extra</span>
+	            <span>부서</span>
 	          </li>
 	          <li>
-	            <a href="#">
+	            <a href="/board/team?category=1">
 	              <i class="fa fa-book"></i>
-	              <span>Documentation</span>
-	              <span class="badge badge-pill badge-primary">Beta</span>
+	              <span>A</span>
 	            </a>
 	          </li>
 	          <li>
-	            <a href="#">
+	            <a href="/board/team?category=2">
 	              <i class="fa fa-calendar"></i>
-	              <span>Calendar</span>
+	              <span>B</span>
 	            </a>
 	          </li>
 	          <li>
-	            <a href="#">
+	            <a href="/board/team?category=3">
 	              <i class="fa fa-folder"></i>
-	              <span>Examples</span>
+	              <span>C</span>
 	            </a>
 	          </li>
 	        </ul>
@@ -122,6 +102,5 @@
 	  <!-- page-content" -->
 	</div>
 	<!-- page-wrapper -->
-
 </body>
 </html>

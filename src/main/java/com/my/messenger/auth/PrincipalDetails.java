@@ -37,7 +37,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 				return userInfo.getRole();		//GrantedAuthority은 String타입으로 return을 하기에 여기다가 role을 넣어준다
 			}
 		});
-		return null;
+		return collect;
 	}
 
 	@Override

@@ -63,7 +63,13 @@
 								<li>
 									<c:forEach var="endAtt" items="${endAttList}">
 										<c:if test="${endAtt.key == days }">
-											퇴근 시간 : ${endAtt.value }
+											<c:choose>
+												<c:when test="${endAtt.value == null }">
+												</c:when>
+												<c:otherwise>
+													퇴근 시간 : ${endAtt.value }
+												</c:otherwise>
+											</c:choose>											
 										</c:if>
 									</c:forEach>
 								</li>
@@ -86,7 +92,7 @@
 
 
 	$(document).ready(function(){
-		var attendanceChk = $("#attendanceChk").val()
+		var attendanceChk = $("#attendanceChk").val();
 		setInterval(currentTime, 1000);
 		
 		$("#attendanceBtn").click(function(){
@@ -147,7 +153,7 @@
 			calMonth = 1;
 			calYear = calYear + 1;
 		}
-		location.href = "/main?month="+calMonth+"&year="+calYear;
+		location.href = "/board/main?month="+calMonth+"&year="+calYear;
 	}
 	
 	function currentTime(){

@@ -1,44 +1,41 @@
 package com.my.messenger.model.entity;
 
-
 import java.sql.Timestamp;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 
-@Data
 @Entity
-public class UserInfo {
-
+@Data
+public class Board{
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userPk;			//pk	
+	private Integer boardPk;
 	
-	@Column(unique = true)
-	private String username;		//아이디
+	private Integer userPk;
+
+	@Column
+	private String title;
 	
 	@Column
-	private String password;		//비밀번호
+	private String content;
 	
 	@Column
-	private String name;			//이름
-	
-	@Column
-	private String role;			//권한
+	private int category; 
 	
 	@Column
 	@CreationTimestamp
-	private Timestamp creatTime;	//가입일짜
+	private Timestamp createTime;	
 	
+
+	
+
 }

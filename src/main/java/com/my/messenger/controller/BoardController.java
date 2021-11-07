@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.my.messenger.auth.PrincipalDetails;
 import com.my.messenger.model.CalendarInfo;
+import com.my.messenger.model.dto.BoardDto;
 import com.my.messenger.model.entity.Attendance;
+import com.my.messenger.model.entity.Board;
+import com.my.messenger.model.entity.UserInfo;
+import com.my.messenger.service.BoardService;
 import com.my.messenger.service.UserService;
 import com.my.messenger.util.Const;
 
@@ -27,8 +31,12 @@ public class BoardController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping({"","/","/main"})
-	public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, CalendarInfo calendarInfo ) {
+	@Autowired
+	private BoardService boardService;
+	
+	@GetMapping({"","/","/board/main"})
+	public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, 
+			CalendarInfo calendarInfo ) {
 		if(principalDetails == null) {
 			return "redirect:/login";
 		}else {
@@ -107,6 +115,9 @@ public class BoardController {
 				//ㅡㅡㅡ
 				String startTime = startHour + " : " + startMin;
 				String endTime = endHour + " : " + endMin;
+				if(endTime.equals("00 : 00")) {
+					endTime = null;
+				}
 				startAttList.put(attListFor.getDay(),startTime);
 				endAttList.put(attListFor.getDay(),endTime);
 			}
@@ -143,6 +154,7 @@ public class BoardController {
 		
 	}
 	
+	
 	@GetMapping({"/login"})
 	public String login() {
 		return "/user/login";
@@ -153,6 +165,69 @@ public class BoardController {
 	public String postLogin() {
 		return "/user/login";
 	}
+	
+	//게시판
+	@GetMapping({"/board/team"})
+	public String team(Model model, Board board) {
+		
+		if(board == null || board.getCategory() == 0) {
+			return "redirect:/"; //카테고리 없이 접근하면 index페이지로 보냄
+		}
+		List<BoardDto> boardDtoList = boardService.selBoardList(board.getCategory());
+		model.addAttribute("boardDtoList", boardDtoList);
+		model.addAttribute("boardInfo", board);
+		model.addAttribute(Const.TITLE, "게시판");
+		model.addAttribute(Const.VIEW,"/board/team");
+		
+		return Const.TEMPLATE;
+	}
+	
+	@GetMapping({"/board/writeView"})
+	public String writeView(Model model, Board board) {
+		if(board.getBoardPk() == null) {
+			model.addAttribute("writeOrUpd", "쓰기");
+			model.addAttribute("boardInfo", board);
+			model.addAttribute(Const.TITLE, "글쓰기");
+		}else {
+			BoardDto boardInfo = boardService.selBoard(board.getBoardPk());
+			model.addAttribute("writeOrUpd", "수정");
+			model.addAttribute("boardInfo", boardInfo);
+			model.addAttribute(Const.TITLE, "글수정");
+		}		
+		model.addAttribute(Const.VIEW,"/board/write");
+		return Const.TEMPLATE;
+	}
+	
+	@PostMapping({"/board/writeProc"})
+	public String writeProc(Model model, Board board, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		if(board.getBoardPk() == null) { //글쓰기
+			UserInfo userInfo = principalDetails.getUserInfo();
+			board.setUserPk(userInfo.getUserPk());
+			boardService.insBoard(board);
+		}else { //글수정
+			boardService.insBoard(board);
+		}
+			
+		return "redirect:/board/team?category="+board.getCategory();
+	}
+	
+	@GetMapping({"/board/boardDetail"})
+	public String boardDetail(Model model, Board board) {
+		BoardDto boardDto = boardService.selBoard(board.getBoardPk());
+		
+		model.addAttribute("boardDto", boardDto);
+		model.addAttribute(Const.TITLE, "상세");
+		model.addAttribute(Const.VIEW,"/board/boardDetail");
+		return Const.TEMPLATE;
+	}
+	
+	@GetMapping({"/board/delBoard"})
+	public String delBoard(Board board) {
+		boardService.delBoard(board);
+		
+		return "redirect:/board/team?category="+board.getCategory();
+	}
+
 	
 	
 	

@@ -16,8 +16,4 @@ public class CalendarInfo {
 	private int day;					//일
 	
 	private int remine;					//뒤에 빈공간 갯수
-	
-	private Map<Integer,Integer> daySales;
-	
-	private Map<Integer,Integer> dayShots;
 }
