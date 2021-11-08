@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +40,7 @@ public class BoardController {
 	
 	@GetMapping({"","/","/board/main"})
 	public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, 
-			CalendarInfo calendarInfo ) {
+			CalendarInfo calendarInfo) {
 		if(principalDetails == null) {
 			return "redirect:/login";
 		}else {
@@ -168,14 +172,47 @@ public class BoardController {
 	
 	//게시판
 	@GetMapping({"/board/team"})
-	public String team(Model model, Board board) {
+	public String team(Model model, Board board, 
+			@PageableDefault(sort = {"createTime"}, direction = Direction.DESC, size = 10) Pageable pageable) {
 		
 		if(board == null || board.getCategory() == 0) {
 			return "redirect:/"; //카테고리 없이 접근하면 index페이지로 보냄
 		}
-		List<BoardDto> boardDtoList = boardService.selBoardList(board.getCategory());
+		String boardName = "";
+		
+		switch(board.getCategory()) {
+			case 1 :
+				boardName = "A 게시판";
+				break;
+			case 2 :
+				boardName = "B 게시판";
+				break;
+			case 3 :
+				boardName = "C 게시판";
+				break;
+			case 4 :
+				boardName = "공지 사항";
+				break;
+		}
+		 
+		
+		//페이징
+		Page<BoardDto> boardDtoList = boardService.selBoardList(board.getCategory(), pageable);
+		int startIdx = (boardDtoList.getPageable().getPageNumber()/10) * 10;		
+		int endIdx = boardDtoList.getTotalPages() > startIdx+9 ? startIdx+9 : boardDtoList.getTotalPages()-1;
+		if(endIdx == -1) {
+			endIdx = 0;
+		}
+		int endPage = boardDtoList.getTotalPages()-1;
+		if(endPage <0) {
+			endPage = 0;
+		}
+		model.addAttribute("endIdx", endIdx);
+		model.addAttribute("startIdx", startIdx);
+		model.addAttribute("endPage", endPage);
 		model.addAttribute("boardDtoList", boardDtoList);
 		model.addAttribute("boardInfo", board);
+		model.addAttribute("boardName", boardName);
 		model.addAttribute(Const.TITLE, "게시판");
 		model.addAttribute(Const.VIEW,"/board/team");
 		

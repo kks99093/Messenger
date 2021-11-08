@@ -1,16 +1,21 @@
 package com.my.messenger.service;
 
+import java.io.File;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.my.messenger.model.RestFile;
 import com.my.messenger.model.entity.Attendance;
 import com.my.messenger.model.entity.UserInfo;
 import com.my.messenger.model.param.UserParam;
 import com.my.messenger.repository.AttendanceRepository;
 import com.my.messenger.repository.UserRepository;
+import com.my.messenger.util.FileUtils;
 
 @Service
 public class UserService {
@@ -57,6 +62,7 @@ public class UserService {
 		}
 	}
 	
+	
 	//출석 Insert
 	public void insAttendance(Attendance attendance) {
 		if(attendance.getState() == 0) {
@@ -88,6 +94,26 @@ public class UserService {
 	public List<Attendance> attYMList(int userPk, int year, int month){		
 		List<Attendance> attYMList = attendanceRepository.findByUserPkAndYearAndMonthOrderByDayAsc(userPk, year, month);
 		return attYMList;
+		
+	}
+	
+	//프로필 이미지
+	public void updProfileProc(RestFile restFile, HttpServletRequest request, UserInfo userInfo) {
+		String rPath = request.getServletContext().getRealPath("/");
+		String path = rPath+"upload/profileImg/";
+		System.out.println(path);
+		File dir = new File(path);
+		if(!dir.exists()) {
+			dir.mkdirs();
+		}
+		
+		UserInfo userEntity = userRepository.findByUserPk(userInfo.getUserPk());
+		if(userInfo.getProfileImg() != null) {
+			int result = FileUtils.deleteFile(path, userEntity.getProfileImg());
+		}
+		String saveFileNm = FileUtils.createFile(path, restFile);
+		userEntity.setProfileImg(saveFileNm);
+		userRepository.save(userEntity);
 		
 	}
 

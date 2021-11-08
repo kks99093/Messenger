@@ -9,9 +9,9 @@ public class Const {
 	
 	
 	//권한
-	final public static String ROLE_USER = "ROLE_USER";
-	final public static String ROLE_MANAGERA = "ROLE_MANAGERA";
-	final public static String ROLE_MANAGERB = "ROLE_MANAGERB";
-	final public static String ROLE_MANAGERC = "ROLE_MANAGERC";
-	final public static String ROLE_ADMIN = "ROLE_ADMIN";
+	final public static String ROLE_USER = "사원";
+	final public static String ROLE_MANAGERA = "A팀장";
+	final public static String ROLE_MANAGERB = "B팀장";
+	final public static String ROLE_MANAGERC = "C팀장";
+	final public static String ROLE_ADMIN = "관리자";
 }

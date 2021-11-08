@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.my.messenger.auth.PrincipalDetails;
 import com.my.messenger.model.entity.Attendance;
+import com.my.messenger.model.entity.UserInfo;
 import com.my.messenger.model.param.UserParam;
 import com.my.messenger.service.UserService;
 
@@ -30,6 +31,7 @@ public class UserRestController {
 		userService.insAttendance(attendance);
 		return 0;
 	}
+	
 	
 
 }

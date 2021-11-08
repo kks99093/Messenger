@@ -38,6 +38,9 @@ public class UserInfo {
 	private String role;			//권한
 	
 	@Column
+	private String profileImg;		//프로필사진
+	
+	@Column
 	@CreationTimestamp
 	private Timestamp creatTime;	//가입일짜
 	

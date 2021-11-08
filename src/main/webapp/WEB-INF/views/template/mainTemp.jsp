@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
-       
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<sec:authentication property="principal" var="principal"/>       
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,20 +19,30 @@
 	  <nav id="sidebar" class="sidebar-wrapper">
 	    <div class="sidebar-content">
 	      <div class="sidebar-brand">
-	        <a href="#">사이트명r</a>
+	        <a href="/">사이트명r</a>
 	        <div id="close-sidebar">
 	          <i class="fas fa-times"></i>
 	        </div>
 	      </div>
 	      <div class="sidebar-header">
 	        <div class="user-pic">
-	          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
+				<c:choose>
+					<c:when test="${principal.userInfo.profileImg != null }">
+						<img class="profile_img" src="/upload/profileImg/${principal.userInfo.profileImg}">
+					</c:when>
+					<c:otherwise>
+						<img class="profile_img" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
+					</c:otherwise>
+				</c:choose>
+	          <div class="user-info">
+	          	<span style="margin:5px; text-decoration: underline; cursor: pointer;" id="updProfileBtn">수정</span>
+	          </div>
 	        </div>
 	        <div class="user-info">
 	          <span class="user-name">
-	            <strong>이름넣을곳</strong>
+	            <strong>${principal.userInfo.name }</strong>
 	          </span>
-	          <span class="user-role">직책</span>
+	          <span class="user-role">${principal.userInfo.role }</span>
 	        </div>
 	      </div>
 	      <div class="sidebar-menu">
@@ -43,7 +54,7 @@
 	            <span>전체</span>
 	          </li>
 	          <li class="sidebar-dropdown">
-	            <a href="#">
+	            <a href="/board/team?category=4">
 	              <i class="fa fa-tachometer-alt"></i>
 	              <span>공지</span>
 	              <span class="badge badge-pill badge-warning">New</span>

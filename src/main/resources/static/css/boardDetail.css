@@ -1,0 +1,75 @@
+@charset "UTF-8";
+.board_boardName{
+	text-align: center;
+}
+
+.board_container{
+	display:flex;
+	width: 100%;
+	height: 100%;
+	margin-top: 30px;
+}
+
+.boardDetail{
+	margin-left: 200px;
+	flex-grow: 8.5;
+	height: 100%;
+	text-align: center;
+}
+.detail_border{
+	border: solid black 1px;
+}
+
+.detail_top{
+	margin: 10px;
+	display: flex;
+	text-align: center;
+}
+
+.detail_no{
+	flex-grow: 1;
+}
+
+.detail_title{
+	flex-grow: 9;
+}
+
+.detail_userInfo{
+	margin: 10px;
+	display: flex;
+	text-align: center;
+}
+
+.detail_username{
+	flex-grow: 3;
+}
+
+.detail_date{
+	flex-grow: 7;
+}
+
+.detail_content{
+	margin: 10px;
+	height: 500px;
+}
+.detail_upd_del{
+	display: flex;
+	border: none;
+}
+
+#upd_btn{
+	margin: 10px;
+	text-align: center;
+}
+
+#del_btn{
+	margin: 10px;
+	text-align: center;
+}
+
+.user_list{
+	flex-grow: 1.5;
+	margin-right: 100px;
+	border: solid black 1px;
+	text-align: center;
+}

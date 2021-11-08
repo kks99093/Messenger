@@ -26,7 +26,7 @@ public class BoardDto{
 	
 	private int category;
 	
-	private String username; //DTO 추가
+	private String name; //DTO 추가
 	
 	private Timestamp createTime;
 
