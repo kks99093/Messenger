@@ -88,10 +88,26 @@ public class ChatService {
 		chatData.setName(name);
 		chatData.setRoomNumber(roomNumber);
 		chatData.setUserPk(userPk);
-
+		chatData.setCategory(1);
+		
 		chatDataRep.save(chatData);
 		
 		return 0;
+		
+	}
+	
+	public int insChatDateImg(int roomNumber, String strMyPk, String fileName) {
+		ChatData chatData = new ChatData();
+		int myPk = Integer.parseInt(strMyPk);
+		UserInfo userInfo = userRep.findByUserPk(myPk);
+		chatData.setChatMsg(fileName);
+		chatData.setName(userInfo.getName());
+		chatData.setRoomNumber(roomNumber);
+		chatData.setUserPk(myPk);
+		chatData.setCategory(2);
+		chatDataRep.save(chatData);
+		return 0;
+		
 		
 	}
 	

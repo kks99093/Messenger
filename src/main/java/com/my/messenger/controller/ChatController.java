@@ -3,6 +3,8 @@ package com.my.messenger.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,6 @@ public class ChatController {
 			roomNumber = result;
 			chatDataList = chatService.selChatDataList(roomNumber);
 		}
-		
 		model.addAttribute("chatDataList", chatDataList);
 		model.addAttribute(userParam);
 		model.addAttribute("roomNumber", roomNumber);

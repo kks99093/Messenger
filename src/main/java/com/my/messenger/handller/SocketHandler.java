@@ -1,15 +1,19 @@
 package com.my.messenger.handller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.UUID;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -25,9 +29,10 @@ public class SocketHandler extends TextWebSocketHandler {
 	private ChatService chatService;
 	
 	private JsonToObjectParser jsonToObjectParser = new JsonToObjectParser();
-	
-	
+		
 	List<HashMap<String,Object>> rls = new ArrayList<>(); //채팅방 세션
+	
+	static int fileUploadIdx = 0;
 	
 	
 	@SuppressWarnings("unchecked")
@@ -121,6 +126,68 @@ public class SocketHandler extends TextWebSocketHandler {
 		
 		
 	}
+	
+	
+	@Override
+	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+		ByteBuffer byteBuffer = message.getPayload();
+		String rootPath = System.getProperty("user.dir");;
+        String path = rootPath+"/src/main/webapp/upload/chat";        
+        String fileName = UUID.randomUUID()+".jpg";
+        File dir = new File(path);
+        if(!dir.exists()) {
+        	dir.mkdirs();
+        }
+        
+        File file = new File(path, fileName);
+		FileOutputStream out = null;
+		FileChannel outChannel = null;
+		try {
+			byteBuffer.flip();//ByteBuffer를 읽기 위해 세팅
+			out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다 (아웃 스트림 출력을 위한 스트림)
+			outChannel = out.getChannel(); //채널을 열고, (채널이 Stream에 포함되어있는 기능인가? stream을 연후 그안에서 channel을 연결하네?)
+			byteBuffer.compact(); //파일을 복사한다
+			outChannel.write(byteBuffer); //파일을 쓴다
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				//스트림은 열었으면 항상 닫아줘야한다
+				if(out != null) {
+					out.close();
+				}
+				if(outChannel != null) {
+					outChannel.close();
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		byteBuffer.position(0); //파일을 저장하면 position 값이 변경되었으므로 0으로 초기화한다.(뭔말인지 모르겠음 ㅠ)
+		HashMap<String, Object> temp = rls.get(fileUploadIdx);
+		int roomNumber = (int)temp.get("roomNumber");
+		String url = session.getUri().toString();
+		String roomNum = url.split("/chating/")[1];
+		String myPk = roomNum.split("&")[0];
+		
+		chatService.insChatDateImg(roomNumber, myPk, fileName);
+		
+		for(String k : temp.keySet()) {
+			if(k.equals("roomNumber")) {
+				continue;
+			}
+			WebSocketSession wss = (WebSocketSession) temp.get(k);
+			try {
+				wss.sendMessage(new BinaryMessage(byteBuffer));//초기화된 버퍼를 발송한다. js의 onmessge함수로 발송
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		
+	}
+	
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {

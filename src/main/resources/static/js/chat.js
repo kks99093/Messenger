@@ -29,10 +29,13 @@ function wsEvt() {
 				}else{
 					$("#chating").append("<p class='others'>" + msgData.name + " : " + msgData.msg + "</p>")
 				}				
+			}else{
+				console.wrn("unknown type!")
 			}
 				
 		}else{
-			console.wrn("unknown type!")
+			var url = URL.createObjectURL(new Blob([msg]));
+			$("#chating").append("<div class='img'><img class='msgImg' src="+url+"></div><div class='clearBoth'></div>")
 		}
 		
 	}
@@ -57,4 +60,26 @@ function send() {
 	$('#chatting').val("");
 }
 
+
+
 wsOpen()
+
+function fileSend(){
+	var file = document.querySelector("#fileUpload").files[0];
+	var fileReader = new FileReader();
+	fileReader.onload = function(){
+		var data = {
+				type : "fileUpload",
+				file : file,
+				roomNumber : $('#roomNumber').val(),
+				myPk : $("#myPk").val(),
+				name : $("#name").val(),
+				msg : $("#chatting").val()
+		}
+		
+		arrayBuffer = this.result;
+		ws.send(arrayBuffer)
+	}
+	fileReader.readAsArrayBuffer(file)
+	
+}

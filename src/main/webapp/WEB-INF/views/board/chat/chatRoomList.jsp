@@ -10,7 +10,15 @@
   <ul id="notebook_ul">
   	<c:forEach var="chatRoom" items="${chatRoomList}">
 			<li class="chatListLi" onclick="chatClick(${chatRoom.myInfo.userPk}, ${chatRoom.yourInfo.userPk})"><span class="nameSpan">${chatRoom.yourInfo.name } 님과의 대화 :</span> <br>
-				<span class="chatMsgSpan">${chatRoom.chatData.chatMsg }</span>
+				<c:choose>
+					<c:when test="${chatRoom.chatData.category == 1 }">
+						<span class="chatMsgSpan">${chatRoom.chatData.chatMsg }</span>
+					</c:when>
+					<c:otherwise>
+						<span class="chatMsgSpan"> 이미지</span>
+					</c:otherwise>
+				</c:choose>
+				
 			</li>
 	</c:forEach>
   </ul>

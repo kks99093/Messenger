@@ -48,7 +48,7 @@
 			<input type="hidden" id="myPk"value="${principal.userInfo.userPk}">
 			<ul>
 			<c:forEach var="userInfo" items="${userDtoList }">
-				<li class=" ${userInfo.role eq '팀장' ? 'teamReader' : '' } ${userInfo.userPk == principal.userInfo.userPk ? 'myInfo' : 'mouse_hover mouse_cursor'}" onclick="userChatClick(${userInfo.userPk })">
+				<li class=" ${userInfo.role eq '팀장' ? 'teamReader' : '' } ${userInfo.userPk == principal.userInfo.userPk ? 'myInfo disable_evt' : 'mouse_hover mouse_cursor'}" onclick="userChatClick(${userInfo.userPk })">
 					<span>${userInfo.name }</span>
 				</li>	
 			</c:forEach>

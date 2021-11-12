@@ -33,6 +33,9 @@ public class ChatData {
 	private String chatMsg;
 	
 	@Column
+	private int category; //1=텍스트 , 2=이미지
+	
+	@Column
 	@CreationTimestamp
 	private Timestamp creatTime;
 	

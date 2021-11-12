@@ -11,7 +11,7 @@ public interface ChatDataRepository extends JpaRepository<ChatData, Integer>{
 	
 	List<ChatData> findByRoomNumberOrderByCreatTimeAsc(int roomNumber);
 	
-	@Query(nativeQuery = true, value = " SELECT * FROM chatdata WHERE roomNumber = ?1 ORDER BY creatTime asc LIMIT 1 ")
+	@Query(nativeQuery = true, value = " SELECT * FROM chatdata WHERE roomNumber = ?1 ORDER BY creatTime desc LIMIT 1 ")
 	ChatData findByRoomNumber(int roomNumber);
 	
 

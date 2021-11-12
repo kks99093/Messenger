@@ -107,7 +107,6 @@ public class UserService {
 	public void updProfileProc(RestFile restFile, HttpServletRequest request, UserInfo userInfo) {
 		String rPath = request.getServletContext().getRealPath("/");
 		String path = rPath+"upload/profileImg/";
-		System.out.println(path);
 		File dir = new File(path);
 		if(!dir.exists()) {
 			dir.mkdirs();
