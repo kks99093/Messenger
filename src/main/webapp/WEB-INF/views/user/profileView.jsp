@@ -3,52 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <sec:authentication property="principal" var="principal"/>   
-<style>
-.profile_container{
-	margin-left: 300px;
-	margin-top : 200px;
-	width: 700px;
-	display: flex;
-	border: solid black 1px;
-}
-
-.profileFrm{
-	width: 40%;
-}
-
-.profile_img_div{
-	display: flex;
-    flex-direction: column;
-    border-right: solid black 1px;
-}
-
-.profile_img{
-	margin: 20px;
-	width:105px;
-	height:135px;
-}
-
-.profile_img_ul{
-	list-style: none;
-}
-
-.profileImg_input{
-	margin-top: 10px;
-}
-
-.profile_info_ul{
-	list-style: none;
-	margin: 50px;
-}
-
-.profile_info_ul li{
-	font-size: 18px;
-	margin: 10px;
-}
-.submit_btn{
-	margin: 100px;
-}
-</style>
+<link rel="stylesheet" href="/css/profileView.css"> 
+<script src="/js/profileView.js"></script>
 <div class="profile_container">
 	<form action="/user/updProfileProc" method="post" id="profileFrm"  class="profileFrm" enctype="multipart/form-data">
 		<div class="profile_img_div">
@@ -75,18 +31,3 @@
 		</div>
 	
 </div>
-
-<script>
-	$(document).ready(function(){
-		$('#profileFrm').submit(function(){
-			var profileImg = $('#profileImg').val()
-			if(profileImg == null || profileImg.trim() == ''){
-				alert('파일을 선택 해주세요')
-				return false
-			}
-			
-			return true;
-			
-		})
-	})
-</script>

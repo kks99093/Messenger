@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserParam extends UserInfo {
-
+	private Integer myPk;
+	private Integer yourPk;
 }

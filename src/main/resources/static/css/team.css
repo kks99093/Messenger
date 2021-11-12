@@ -76,3 +76,24 @@
 .enable_pageNum{
 	font-weight: bold;
 }
+.teamReader{
+	font-size: 18px;
+	font-weight: bold;
+}
+.user_list ul{
+	list-style: none;
+}
+.user_list ul li{
+	margin: 5px;
+	
+}
+.mouse_hover:hover{
+	background-color: #c0c0c0;
+}
+
+.mouse_cursor{
+	cursor: pointer;
+}
+.myInfo{
+	color: #00ff80;
+}

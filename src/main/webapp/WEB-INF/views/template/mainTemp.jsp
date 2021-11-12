@@ -57,7 +57,7 @@
 	            <a href="/board/team?category=4">
 	              <i class="fa fa-tachometer-alt"></i>
 	              <span>공지</span>
-	              <span class="badge badge-pill badge-warning">New</span>
+	              <!-- <span class="badge badge-pill badge-warning">New</span> -->	              
 	            </a>
 	          </li>
 	          <li class="header-menu">
@@ -87,20 +87,9 @@
 	    </div>
 	    <!-- sidebar-content  -->
 	    <div class="sidebar-footer">
-	      <a href="#">
-	        <i class="fa fa-bell"></i>
-	        <span class="badge badge-pill badge-warning notification">3</span>
-	      </a>
-	      <a href="#">
+	      <a href="/chat/chatRoomList/">
 	        <i class="fa fa-envelope"></i>
-	        <span class="badge badge-pill badge-success notification">7</span>
-	      </a>
-	      <a href="#">
-	        <i class="fa fa-cog"></i>
-	        <span class="badge-sonar"></span>
-	      </a>
-	      <a href="#">
-	        <i class="fa fa-power-off"></i>
+	        <span class="badge badge-pill badge-success notification">채팅방 가기</span>
 	      </a>
 	    </div>
 	  </nav>

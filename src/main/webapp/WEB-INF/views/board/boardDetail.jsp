@@ -33,9 +33,17 @@
 	
 	
 	<!-- 여기가 유저목록 -->
+	<!-- 여기가 유저목록 -->
 	<c:if test="${boardInfo.category != 4 }">
 		<div class="user_list">
-			aaaaaaaa
+			<input type="hidden" id="myPk"value="${principal.userInfo.userPk}">
+			<ul>
+			<c:forEach var="userInfo" items="${userDtoList }">
+				<li class=" ${userInfo.role eq '팀장' ? 'teamReader' : '' } ${userInfo.userPk == principal.userInfo.userPk ? 'myInfo' : 'mouse_hover mouse_cursor'}" onclick="userChatClick(${userInfo.userPk })">
+					<span>${userInfo.name }</span>
+				</li>	
+			</c:forEach>
+			</ul>
 		</div>
 	</c:if>
 	

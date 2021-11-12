@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>       
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<sec:authentication property="principal" var="principal"/>
 <script src="/js/jquery-3.4.1.min.js"></script>
 <link rel="stylesheet" href="/css/team.css"> 
 <script src="/js/team.js"></script>
@@ -43,10 +45,14 @@
 	<!-- 여기가 유저목록 -->
 	<c:if test="${boardInfo.category != 4 }">
 		<div class="user_list">
-		aaaaaaaa
+			<input type="hidden" id="myPk"value="${principal.userInfo.userPk}">
+			<ul>
+			<c:forEach var="userInfo" items="${userDtoList }">
+				<li class=" ${userInfo.role eq '팀장' ? 'teamReader' : '' } ${userInfo.userPk == principal.userInfo.userPk ? 'myInfo' : 'mouse_hover mouse_cursor'}" onclick="userChatClick(${userInfo.userPk })">
+					<span>${userInfo.name }</span>
+				</li>	
+			</c:forEach>
+			</ul>
 		</div>
 	</c:if>
 </div>
-<script>
-	
-</script>

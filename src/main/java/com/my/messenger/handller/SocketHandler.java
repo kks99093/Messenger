@@ -1,67 +1,138 @@
 package com.my.messenger.handller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.my.messenger.service.ChatService;
 import com.my.messenger.util.JsonToObjectParser;
 
 @Component
 public class SocketHandler extends TextWebSocketHandler {
+
+	@Autowired
+	private ChatService chatService;
 	
 	private JsonToObjectParser jsonToObjectParser = new JsonToObjectParser();
 	
-	HashMap<String, WebSocketSession> sessionMap = new HashMap<>(); //웹소켓 세션을 담아둘 Map
-									//웹소켓세션이 현재 이 채팅방에 들어와있는 사람들, sessionMap에는 현재 채팅방에 있는 사람들의 정보가 담겨있는듯
-																
-	//밑의 메소드들은 상속받은 TextWebSocketHandler가 상속받은 AbstractWebSocketHandler에 들어있는 메소드
+	
+	List<HashMap<String,Object>> rls = new ArrayList<>(); //채팅방 세션
+	
+	
 	@SuppressWarnings("unchecked")
-	@Override 
+	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		//소켓 연결 ( 웹소켓이 연결되면 동작 )
-		super.afterConnectionEstablished(session); //채팅방에 입장할때 여기서 해당 브라우저에 소켓을 연결하면서 id를 부여
-		sessionMap.put(session.getId(), session);  //여기서 id를 키값으로 session을 sessionMap에 넣어놓는다
+		// 소켓 연결될때 동작
+		super.afterConnectionEstablished(session);
+		String url = session.getUri().toString();
+		String roomNum = url.split("/chating/")[1];
+		int roomNumber = 0;
+		boolean flag = false;
+		//DB에서 방번호를 가져옴
+		String myPk = roomNum.split("&")[0];
+		int intMyPk = Integer.parseInt(myPk);
+		String yourPk = roomNum.split("&")[1];
+		int intyourPk = Integer.parseInt(yourPk);
+		if(!roomNum.equals("0")) { //1대1방일경우			
+			int result = chatService.selChatRoom(intMyPk, intyourPk);
+			if(result == 0) { //대화방 없음 방 생성
+				roomNumber = chatService.insChatRoom(intMyPk, intyourPk);
+			}else { //받아온 방번호로 방을 연결
+				roomNumber = result;
+			}
+		}else {	//단체방인경우
+			
+		}
 		
-		
-		JSONObject obj = new JSONObject();
-		obj.put("type", "getId"); 	//입장할때 보내는 메세지인지 채팅때 보내는 메세지인지를 구분하기위해 type에 getId를 넣고 js에서 구분
-		obj.put("sessionId", session.getId());
-		session.sendMessage(new TextMessage(obj.toJSONString())); //채팅방에 입장할때 무슨 메세지를 보냄
-		
-	}
-	
-	
-	@Override //메시지 발송 (메세지를 수신하면 실행)
-	public void handleTextMessage(WebSocketSession session, TextMessage message) {
-		String msg = message.getPayload(); //js에서 ws.send("내용")로 보내는 내용이 여기에 담김
-		JSONObject obj = jsonToObjectParser.jsonToObject(msg); // 받은내용을 json으로 바꿈
-		
-		for(String key : sessionMap.keySet()) {			 
-			WebSocketSession wss = sessionMap.get(key);
-			//채팅방에 접속한 사람들(sessionMap)중에 메세지 보낸사람의 정보를 wss에 담음
-			try {
-				
-				wss.sendMessage(new TextMessage(obj.toJSONString()));
-				//메세지 보내는사람의 정보로 메세지를 넣어서 js의 onmessage로 다시 보냄
-				
-			}catch(Exception e) {
-				e.printStackTrace();
+		int idx = rls.size();
+		if(rls.size() >0) {
+			for(int i=0; i<rls.size(); i++) {
+				int intRN = (int) rls.get(i).get("roomNumber");
+				if(intRN == roomNumber) {
+					flag = true;
+					idx = i;
+					break;
+				}
 			}
 		}
 		
+		if(flag) {
+			HashMap<String, Object> map = rls.get(idx);
+			map.put(session.getId(), session);
+		}else {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("roomNumber", roomNumber);
+			map.put(session.getId(), session);
+			rls.add(map);
+		}
+
 	}
 	
 	
-	@Override 
+	@Override
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		super.handleTextMessage(session, message);
+		String msg = message.getPayload();
+		JSONObject obj = jsonToObjectParser.jsonToObject(msg);
+		int insResult = chatService.insChatData(obj);
+		String rN = (String) obj.get("roomNumber");		
+		int intRN = Integer.parseInt(rN);
+		HashMap<String, Object> temp = new HashMap<String, Object>();
+		
+		String msgType = (String) obj.get("type");
+		
+		if(rls.size() > 0) {
+			for(int i=0; i<rls.size(); i++) {
+				int roomNumber = (int) rls.get(i).get("roomNumber");
+				if(roomNumber == intRN) {
+					temp = rls.get(i);
+					
+					break;
+				}
+			}
+		}
+		
+		if(!msgType.equals("fileUpload")) {
+			for(String k : temp.keySet()) {
+				if(k.equals("roomNumber")) {
+					continue;
+				}
+				WebSocketSession wss = (WebSocketSession) temp.get(k);
+				if(wss != null) {
+					try {
+						wss.sendMessage(new TextMessage(obj.toJSONString()));
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		
+	}
+	
+	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		//소켓 종료 (웹소켓이 종료되면 동작)
-		sessionMap.remove(session.getId());//sessionMap에서 getId()의 키값을 가진 sessionMap을 제거하고
-		super.afterConnectionClosed(session, status); //여기서 소켓을 끊는건가?
+		System.err.println("소켓 Close");
+		
+		if(rls.size() > 0) { //소켓이 종료되면 해당 세션값들을 찾아서 지운다.
+			for(int i=0; i<rls.size(); i++) {
+				rls.get(i).remove(session.getId());
+			}
+		}
+		super.afterConnectionClosed(session, status);
 	}
+	
 
 }

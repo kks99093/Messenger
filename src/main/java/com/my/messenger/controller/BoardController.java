@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.my.messenger.auth.PrincipalDetails;
 import com.my.messenger.model.CalendarInfo;
 import com.my.messenger.model.dto.BoardDto;
+import com.my.messenger.model.dto.UserDto;
 import com.my.messenger.model.entity.Attendance;
 import com.my.messenger.model.entity.Board;
 import com.my.messenger.model.entity.UserInfo;
+import com.my.messenger.model.param.UserParam;
 import com.my.messenger.service.BoardService;
 import com.my.messenger.service.UserService;
 import com.my.messenger.util.Const;
@@ -37,6 +39,7 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
+	
 	
 	@GetMapping({"","/","/board/main"})
 	public String index(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model, 
@@ -159,19 +162,19 @@ public class BoardController {
 	}
 	
 	
-	@GetMapping({"/login"})
+	@GetMapping("/login")
 	public String login() {
 		return "/user/login";
 	}
 	
 	//로그인 실패했을대의 요청은 post로 날아오기때문에 로그인 실패 처리를 위해서 postMapping을 만들어놔야함
-	@PostMapping({"/login"})
+	@PostMapping("/login")
 	public String postLogin() {
 		return "/user/login";
 	}
 	
 	//게시판
-	@GetMapping({"/board/team"})
+	@GetMapping("/board/team")
 	public String team(Model model, Board board, 
 			@PageableDefault(sort = {"createTime"}, direction = Direction.DESC, size = 10) Pageable pageable) {
 		
@@ -213,13 +216,18 @@ public class BoardController {
 		model.addAttribute("boardDtoList", boardDtoList);
 		model.addAttribute("boardInfo", board);
 		model.addAttribute("boardName", boardName);
+		
+		//ㅡㅡㅡㅡㅡ 유저 목록 ㅡㅡㅡㅡㅡ
+		List<UserDto> userDtoList = userService.selUserList(board.getCategory());		
+		model.addAttribute("userDtoList", userDtoList);
+		
 		model.addAttribute(Const.TITLE, "게시판");
 		model.addAttribute(Const.VIEW,"/board/team");
 		
 		return Const.TEMPLATE;
 	}
 	
-	@GetMapping({"/board/writeView"})
+	@GetMapping("/board/writeView")
 	public String writeView(Model model, Board board) {
 		if(board.getBoardPk() == null) {
 			model.addAttribute("writeOrUpd", "쓰기");
@@ -235,7 +243,7 @@ public class BoardController {
 		return Const.TEMPLATE;
 	}
 	
-	@PostMapping({"/board/writeProc"})
+	@PostMapping("/board/writeProc")
 	public String writeProc(Model model, Board board, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		if(board.getBoardPk() == null) { //글쓰기
 			UserInfo userInfo = principalDetails.getUserInfo();
@@ -248,17 +256,20 @@ public class BoardController {
 		return "redirect:/board/team?category="+board.getCategory();
 	}
 	
-	@GetMapping({"/board/boardDetail"})
+	@GetMapping("/board/boardDetail")
 	public String boardDetail(Model model, Board board) {
 		BoardDto boardDto = boardService.selBoard(board.getBoardPk());
 		
+		List<UserDto> userDtoList = userService.selUserList(board.getCategory());
+		
+		model.addAttribute("userDtoList", userDtoList);		
 		model.addAttribute("boardDto", boardDto);
 		model.addAttribute(Const.TITLE, "상세");
 		model.addAttribute(Const.VIEW,"/board/boardDetail");
 		return Const.TEMPLATE;
 	}
 	
-	@GetMapping({"/board/delBoard"})
+	@GetMapping("/board/delBoard")
 	public String delBoard(Board board) {
 		boardService.delBoard(board);
 		

@@ -38,6 +38,9 @@ public class UserInfo {
 	private String role;			//권한
 	
 	@Column
+	private int departMent;			//1.A 2.B 3.C
+	
+	@Column
 	private String profileImg;		//프로필사진
 	
 	@Column

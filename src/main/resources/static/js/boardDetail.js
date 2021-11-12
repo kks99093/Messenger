@@ -19,3 +19,13 @@ $(document).ready(function(){
 function moveDetail(boardPk){
 	location.href = '/board/boardDetail?boardPk='+boardPk	
 }
+
+
+function userChatClick(userPk){
+			var myPk = $('#myPk').val();
+			var yourPk = userPk;
+			var url = "/chat/chat?myPk="+myPk+"&yourPk="+yourPk;
+			var popNm = "chat"
+			var options = 'width=500, height=700, scrollbars= yes, status=no, menubar=no, toolbar=no, resizable=no';			
+			window.open(url, popNm, options);
+}

@@ -1,15 +1,18 @@
 package com.my.messenger.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.my.messenger.model.RestFile;
+import com.my.messenger.model.dto.UserDto;
 import com.my.messenger.model.entity.Attendance;
 import com.my.messenger.model.entity.UserInfo;
 import com.my.messenger.model.param.UserParam;
@@ -28,6 +31,9 @@ public class UserService {
 	
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	//로그인 실패시 아이디, 비밀번호 확인
 	public String loginFail(String username) {
@@ -114,6 +120,17 @@ public class UserService {
 		String saveFileNm = FileUtils.createFile(path, restFile);
 		userEntity.setProfileImg(saveFileNm);
 		userRepository.save(userEntity);
+		
+	}
+	
+	public List<UserDto> selUserList(int departMent){
+		List<UserInfo> userInfoList = userRepository.findByDepartMentOrderByRoleDesc(departMent);
+		List<UserDto> userDtoList = new ArrayList<>();
+		for(UserInfo userInfo : userInfoList) {
+			UserDto userDto = modelMapper.map(userInfo, UserDto.class);
+			userDtoList.add(userDto);
+		}
+		return userDtoList;
 		
 	}
 
