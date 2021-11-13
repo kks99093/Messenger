@@ -90,13 +90,14 @@ public class SocketHandler extends TextWebSocketHandler {
 		super.handleTextMessage(session, message);
 		String msg = message.getPayload();
 		JSONObject obj = jsonToObjectParser.jsonToObject(msg);
-		int insResult = chatService.insChatData(obj);
+		String msgType = (String) obj.get("type");
+		if(msgType.equals("message")) {
+			int insResult = chatService.insChatData(obj);
+		}		
 		String rN = (String) obj.get("roomNumber");		
 		int intRN = Integer.parseInt(rN);
 		HashMap<String, Object> temp = new HashMap<String, Object>();
-		
-		String msgType = (String) obj.get("type");
-		
+
 		if(rls.size() > 0) {
 			for(int i=0; i<rls.size(); i++) {
 				int roomNumber = (int) rls.get(i).get("roomNumber");
@@ -108,7 +109,7 @@ public class SocketHandler extends TextWebSocketHandler {
 			}
 		}
 		
-		if(!msgType.equals("fileUpload")) {
+//		if(!msgType.equals("fileUpload")) {
 			for(String k : temp.keySet()) {
 				if(k.equals("roomNumber")) {
 					continue;
@@ -122,7 +123,7 @@ public class SocketHandler extends TextWebSocketHandler {
 					}
 				}
 			}
-		}
+//		}
 		
 		
 	}
@@ -172,7 +173,6 @@ public class SocketHandler extends TextWebSocketHandler {
 		String myPk = roomNum.split("&")[0];
 		
 		chatService.insChatDateImg(roomNumber, myPk, fileName);
-		
 		for(String k : temp.keySet()) {
 			if(k.equals("roomNumber")) {
 				continue;

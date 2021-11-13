@@ -25,7 +25,10 @@ public class ChatController {
 	private ChatService chatService;
 	//챗
 	@GetMapping("/chat/chat")
-	public String chat(Model model, UserParam userParam){
+	public String chat(Model model, UserParam userParam, @AuthenticationPrincipal PrincipalDetails principalDeatils){
+		if(principalDeatils.getUserInfo().getUserPk() != userParam.getMyPk()) {
+			return "redirect:/";
+		}
 		int roomNumber = 0;
 		List<ChatData> chatDataList = new ArrayList<>();
 		int result = chatService.selChatRoom(userParam.getMyPk(), userParam.getYourPk());

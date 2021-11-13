@@ -27,9 +27,20 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<div class="board_write_btn_div">
-			<button type="button" id="board_write_btn" class="board_write_btn">글쓰기</button>
-		</div>
+		<c:choose>
+			<c:when test="${boardInfo.category == 4}">
+				<c:if test="${principal.userInfo.role eq '팀장' }">
+					<div class="board_write_btn_div">
+						<button type="button" id="board_write_btn" class="board_write_btn">글쓰기</button>
+					</div>
+				</c:if>
+			</c:when>
+			<c:otherwise>
+				<div class="board_write_btn_div">
+					<button type="button" id="board_write_btn" class="board_write_btn">글쓰기</button>
+				</div>
+			</c:otherwise>
+		</c:choose>				
 		<div class="page">
 			<ul class="page_ul">
 				<li class="page_li page_prev ${boardDtoList.pageable.pageNumber == 0 ? 'disable_evt disable_cursor' : '' }" onclick="pageMove(${boardDtoList.pageable.pageNumber-1})" >이전페이지</li>

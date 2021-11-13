@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		
 		http.authorizeRequests()
-			.antMatchers("/user/**","/board/**").authenticated() //"/user/**"로 들어오는 주소에는 인증이 필요함
+			.antMatchers("/user/**","/board/**","/chat/**").authenticated() //"/user/**"로 들어오는 주소에는 인증이 필요함
 			.antMatchers("manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')") // "/manager/**"로 들어오는 주소는 인증과 권한 필요
 			.anyRequest().permitAll() //위의 주소를 제외하고는 전부 허용
 			.and()
