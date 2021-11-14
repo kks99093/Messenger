@@ -71,6 +71,6 @@ function currentTime(){
 	var currentHour = currentTime.getHours();
 	var currentMinutes = currentTime.getMinutes();
 	var currentSeconds = currentTime.getSeconds();
-    $(".currentTime").html(currentYear+"년 " + currentMonth + "월 " + currentDate + "일 " +  currentHour +":" + currentMinutes + ":"+currentSeconds);
-    //$(".currentTime").html(`\${currentYear}년 \${currentMonth}월 \${currentDate}일 \${currentHour}:\${currentMinutes}:\${currentSeconds}`);
+    $(".currentTime").html(currentYear+"년 " + currentMonth + "월 " + currentDate + "일 " +  currentHour +":" + currentMinutes + ":"+currentSeconds);    
 }
+//$(".currentTime").html(`\${currentYear}년 \${currentMonth}월 \${currentDate}일 \${currentHour}:\${currentMinutes}:\${currentSeconds}`);

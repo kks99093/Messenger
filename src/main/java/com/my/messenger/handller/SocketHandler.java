@@ -124,8 +124,6 @@ public class SocketHandler extends TextWebSocketHandler {
 				}
 			}
 //		}
-		
-		
 	}
 	
 	
@@ -183,9 +181,7 @@ public class SocketHandler extends TextWebSocketHandler {
 			}catch(IOException e) {
 				e.printStackTrace();
 			}
-		}
-
-		
+		}	
 	}
 	
 	

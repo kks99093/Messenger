@@ -39,9 +39,7 @@
 						<input type="submit" class="button" value="로그인">
 					</div>
 					<div class="hr"></div>
-					<div class="foot-lnk">
-						<a href="#forgot">Forgot Password?</a>
-					</div>
+
 				</div>
 			</form>
 			<div class="sign-up-htm">

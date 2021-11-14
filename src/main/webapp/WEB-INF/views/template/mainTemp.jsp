@@ -19,7 +19,7 @@
 	  <nav id="sidebar" class="sidebar-wrapper">
 	    <div class="sidebar-content">
 	      <div class="sidebar-brand">
-	        <a href="/">사이트명r</a>
+	        <a href="/">Messenger</a>
 	        <div id="close-sidebar">
 	          <i class="fas fa-times"></i>
 	        </div>
