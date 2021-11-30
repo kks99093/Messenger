@@ -50,10 +50,11 @@ public class BoardService {
 	public Page<BoardDto> selBoardList(int category, Pageable pageable){
 		Page<Board> boardList = boardRep.findByCategory(category, pageable);
 		List<BoardDto> boardDtoList = new ArrayList<>();
-		for(Board board : boardList.getContent()) {			
-			int userPk = board.getUserPk();	
+		for(Board board : boardList.getContent()) {
+//			int userPk = board.getUserPk();
+			UserInfo userInfo = board.getUserInfo();				
 			BoardDto boardDto = modelMapper.map(board, BoardDto.class);
-			UserInfo userInfo = userRep.findByUserPk(userPk);
+//			UserInfo userInfo = userRep.findByUserPk(userPk);
 			boardDto.setName(userInfo.getName());			
 			boardDtoList.add(boardDto);
 			
@@ -65,8 +66,9 @@ public class BoardService {
 	public BoardDto selBoard(int boardPk) {
 		Board board = boardRep.findByBoardPk(boardPk);
 		BoardDto boardDto = modelMapper.map(board, BoardDto.class);
-		int userPk = board.getUserPk();	
-		UserInfo userInfo = userRep.findByUserPk(userPk);
+//		int userPk = board.getUserPk();			
+//		UserInfo userInfo = userRep.findByUserPk(userPk);
+		UserInfo userInfo = board.getUserInfo();
 		boardDto.setName(userInfo.getName());		
 		
 		return boardDto;

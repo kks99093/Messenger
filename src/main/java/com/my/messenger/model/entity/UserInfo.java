@@ -4,10 +4,8 @@ package com.my.messenger.model.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,4 +45,16 @@ public class UserInfo {
 	@CreationTimestamp
 	private Timestamp creatTime;	//가입일짜
 	
+	@OneToMany(mappedBy = "userInfo")
+	private List<ChatData> chatDataList;
+	
+	@OneToMany(mappedBy = "userInfo")
+	private List<Board> boardList;
+	
+	@OneToMany(mappedBy = "userInfo")
+	private List<ChatRoom> chatRoomList;
+	
+	@OneToMany(mappedBy = "userInfo")
+	private List<Attendance> attendanceList;
+
 }

@@ -15,9 +15,12 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
 	@Query(nativeQuery = true, value=" SELECT chatRoomPk, MAX(roomNumber) as roomNumber, userPk, state FROM chatroom ")
 	ChatRoom findByMaxRoomNumber();
 	
-	List<ChatRoom> findByStateAndUserPk(int state, int userPk);
+//	List<ChatRoom> findByStateAndUserPk(int state, int userPk);
+//	List<ChatRoom> findByUserPk(int userPk);
 	
-	List<ChatRoom> findByUserPk(int userPk);
+	List<ChatRoom> findByStateAndUserInfo(int state, int userPk);
+	
+	List<ChatRoom> findByUserInfo(int userPk);
 	
 	List<ChatRoom> findByRoomNumber(int roomNumber);
 

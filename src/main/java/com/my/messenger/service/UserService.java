@@ -70,12 +70,13 @@ public class UserService {
 	
 	
 	//출석 Insert
-	public void insAttendance(Attendance attendance) {
-		if(attendance.getState() == 0) {
+	public void insAttendance(Attendance attendance, UserInfo userInfo) {
+		if(attendance.getState() == 0) {			
+			attendance.setUserInfo(userInfo);
 			attendance.setState(1);
 			attendanceRepository.save(attendance);
 		}else if(attendance.getState() == 1) {
-			Attendance attendanceDto = attendanceRepository.findByUserPkAndYearAndMonthAndDay(attendance.getUserPk(), attendance.getYear(), attendance.getMonth(), attendance.getDay());
+			Attendance attendanceDto = attendanceRepository.findByUserInfoAndYearAndMonthAndDay(userInfo, attendance.getYear(), attendance.getMonth(), attendance.getDay());
 			attendanceDto.setState(2);
 			attendanceDto.setEndHour(attendance.getEndHour());
 			attendanceDto.setEndMinute(attendance.getEndMinute());
@@ -85,8 +86,8 @@ public class UserService {
 	}
 	
 	//출석 체크
-	public int attendanceChk(Attendance attendance) {
-		Attendance attendanceDto = attendanceRepository.findByUserPkAndYearAndMonthAndDay(attendance.getUserPk(), attendance.getYear(), attendance.getMonth(), attendance.getDay());
+	public int attendanceChk(Attendance attendance, UserInfo userInfo) {
+		Attendance attendanceDto = attendanceRepository.findByUserInfoAndYearAndMonthAndDay(userInfo, attendance.getYear(), attendance.getMonth(), attendance.getDay());
 		if(attendanceDto == null) {
 			return 0; //출근X
 		}else if(attendanceDto.getState() == 1) {
@@ -97,8 +98,8 @@ public class UserService {
 	}
 	
 	//달 출석 현황
-	public List<Attendance> attYMList(int userPk, int year, int month){		
-		List<Attendance> attYMList = attendanceRepository.findByUserPkAndYearAndMonthOrderByDayAsc(userPk, year, month);
+	public List<Attendance> attYMList(UserInfo userInfo, int year, int month){
+		List<Attendance> attYMList = attendanceRepository.findByUserInfoAndYearAndMonthOrderByDayAsc(userInfo, year, month);
 		return attYMList;
 		
 	}
@@ -131,6 +132,11 @@ public class UserService {
 		}
 		return userDtoList;
 		
+	}
+	
+	public UserInfo selUserPk(int userPk) {
+		UserInfo userInfo = userRepository.findByUserPk(userPk);
+		return userInfo;
 	}
 
 }

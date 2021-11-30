@@ -26,7 +26,6 @@ import com.my.messenger.model.dto.UserDto;
 import com.my.messenger.model.entity.Attendance;
 import com.my.messenger.model.entity.Board;
 import com.my.messenger.model.entity.UserInfo;
-import com.my.messenger.model.param.UserParam;
 import com.my.messenger.service.BoardService;
 import com.my.messenger.service.UserService;
 import com.my.messenger.util.Const;
@@ -92,7 +91,7 @@ public class BoardController {
 			Map<Integer, String> startAttList = new HashMap<Integer, String>();
 			Map<Integer, String> endAttList = new HashMap<Integer, String>();
 			
-			List<Attendance> attList = userService.attYMList(principalDetails.getUserInfo().getUserPk(), tempYear, tempMonth);
+			List<Attendance> attList = userService.attYMList(principalDetails.getUserInfo(), tempYear, tempMonth);
 			for(Attendance attListFor : attList) {
 				String startHour = "";
 				String startMin = "";
@@ -146,8 +145,8 @@ public class BoardController {
 			attendance.setYear(currentYear);
 			attendance.setMonth(currentMonth);
 			attendance.setDay(currentDay);
-			attendance.setUserPk(principalDetails.getUserInfo().getUserPk());
-			int attendanceChk = userService.attendanceChk(attendance);
+//			attendance.setUserPk(principalDetails.getUserInfo().getUserPk());
+			int attendanceChk = userService.attendanceChk(attendance, principalDetails.getUserInfo());
 			model.addAttribute("attendanceChk", attendanceChk);			
 			//ㅡㅡㅡㅡㅡㅡㅡㅡ
 			
@@ -247,7 +246,8 @@ public class BoardController {
 	public String writeProc(Model model, Board board, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		if(board.getBoardPk() == null) { //글쓰기
 			UserInfo userInfo = principalDetails.getUserInfo();
-			board.setUserPk(userInfo.getUserPk());
+//			board.setUserPk(userInfo.getUserPk());
+			board.setUserInfo(userInfo);
 			boardService.insBoard(board);
 		}else { //글수정
 			boardService.insBoard(board);

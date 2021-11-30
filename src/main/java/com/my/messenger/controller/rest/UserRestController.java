@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.my.messenger.auth.PrincipalDetails;
 import com.my.messenger.model.entity.Attendance;
-import com.my.messenger.model.entity.UserInfo;
 import com.my.messenger.model.param.UserParam;
 import com.my.messenger.service.UserService;
 
@@ -27,8 +26,8 @@ public class UserRestController {
 	@PostMapping("/auth/attendance")
 	public int attendance(@RequestBody Attendance attendance, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		Integer userPk = principalDetails.getUserInfo().getUserPk();
-		attendance.setUserPk(userPk);
-		userService.insAttendance(attendance);
+//		attendance.setUserPk(userPk);
+		userService.insAttendance(attendance, principalDetails.getUserInfo());
 		return 0;
 	}
 	
